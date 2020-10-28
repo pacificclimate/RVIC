@@ -22,10 +22,8 @@ jobs:
     - name: Test with pytest (full)
       if: github.ref == 'refs/heads/master'
       run: |
-        py.test -m "not local" -v
-        python ./tests/run_tests.py examples --examples ./tests/test.cfg
+        python ./tests/run_tests.py examples all --examples ./tests/test.cfg
     - name: Test with pytest (fast)
       if: github.ref != 'refs/heads/master'
       run: |
-        py.test -m "not local and not slow" -v
-        python ./tests/run_tests.py examples --examples ./tests/test.cfg
+        python ./tests/run_tests.py examples all --examples ./tests/test.cfg
