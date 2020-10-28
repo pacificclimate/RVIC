@@ -33,6 +33,6 @@ def run_test(rvic_module, config, np=None):
     print(s.getvalue())
     print("".center(100, "-"))
 
-    print(f"\ttest_convert: {0}".format(test_outcome))
+    print("\ttest_convert: {0}".format(test_outcome))
 
     assert test_outcome == "Passed"
