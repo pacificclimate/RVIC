@@ -41,6 +41,11 @@ def convolution(config):
         Path to RVIC convolution configuration file or dictionary of
         configuration options.
     """
+    # ---------------------------------------------------------------- #
+    # Get main logger
+    log = getLogger(LOG_NAME)
+    # ---------------------------------------------------------------- #
+
     try:
         # ---------------------------------------------------------------- #
         # Initilize
@@ -61,9 +66,10 @@ def convolution(config):
         convolution_final(time_handle, hist_tapes)
         # ---------------------------------------------------------------- #
     
-    except:
+    except BaseException as e:
+        log.error(e, exc_info=True)
         close_logger()
-        
+
     return
 
 

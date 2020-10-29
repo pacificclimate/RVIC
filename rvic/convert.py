@@ -2,7 +2,6 @@
 """
 Read a set of uhs files and write an RVIC parameter file
 """
-
 from logging import getLogger
 from .core.log import init_logger, close_logger, LOG_NAME
 from .core.utilities import make_directories, copy_inputs, read_domain
@@ -15,17 +14,18 @@ from .core.config import read_config
 # -------------------------------------------------------------------- #
 # Top level driver
 def convert(config_file):
+    # ---------------------------------------------------------------- #
+    # Get main logger
+    log = getLogger(LOG_NAME)
+    # ---------------------------------------------------------------- #
+    
     try:
+
         # ---------------------------------------------------------------- #
         # Initilize
         dom_data, new_dom_data, outlets, config_dict, directories = uhs2param_init(
             config_file
         )
-        # ---------------------------------------------------------------- #
-
-        # ---------------------------------------------------------------- #
-        # Get main logger
-        log = getLogger(LOG_NAME)
         # ---------------------------------------------------------------- #
 
         # ---------------------------------------------------------------- #
@@ -38,9 +38,11 @@ def convert(config_file):
         # Finally, make the parameter file
         uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories)
         # ---------------------------------------------------------------- #
-    except:
+
+    except BaseException as e:
+        log.error(e, exc_info=True)
         close_logger()
-        
+
     return
 
 

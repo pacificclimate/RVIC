@@ -46,6 +46,11 @@ def parameters(config, numofproc=1):
     numofproc : int
         Number of processors to use when developing RVIC parameters.
     """
+    # ---------------------------------------------------------------- #
+    # Get main logger
+    log = getLogger(LOG_NAME)
+    # ---------------------------------------------------------------- #
+
     try:
         # ---------------------------------------------------------------- #
         # Initialize
@@ -58,11 +63,6 @@ def parameters(config, numofproc=1):
             config_dict,
             directories,
         ) = gen_uh_init(config)
-        # ---------------------------------------------------------------- #
-
-        # ---------------------------------------------------------------- #
-        # Get main logger
-        log = getLogger(LOG_NAME)
         # ---------------------------------------------------------------- #
 
         # ---------------------------------------------------------------- #
@@ -116,7 +116,8 @@ def parameters(config, numofproc=1):
         gen_uh_final(outlets, dom_data, config_dict, directories)
         # ---------------------------------------------------------------- #
     
-    except:
+    except BaseException as e:
+        log.error(e, exc_info=True)
         close_logger()
     
     return
