@@ -55,7 +55,7 @@ def main():
 
     if any(i in ["all", "unit"] for i in args.test_set):
         # run unit tests
-        exit_code = pytest.main("-x unit")
+        exit_code = pytest.main(["-x", os.path.join(os.path.dirname(__file__), "unit")])
     if any(i in ["all", "examples"] for i in args.test_set):
         exit_code = run_examples(args.examples)
     sys.exit(exit_code)

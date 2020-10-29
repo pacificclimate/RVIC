@@ -3,14 +3,15 @@ import os
 import numpy as np
 from rvic.core.variables import Rvar
 from rvic.core.history import Tape
+from pathlib import Path
 
 
 @pytest.mark.local
 @pytest.fixture()
 def rvar(scope="function"):
-    dirname = os.path.dirname(__file__)
+    dirname = Path(__file__).parent.parent
     infile = os.path.join(
-        dirname, "unit_test_data", "gunnison_parameters_01.rvic.prm.BLMSA.20150226.nc"
+        dirname, "data/samples", "sample.rvic.prm.COLUMBIA.20180516.nc"
     )
     rv = Rvar(infile, "test_case", "noleap", dirname, "NETCDF4")
     return rv
