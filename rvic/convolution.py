@@ -41,25 +41,29 @@ def convolution(config):
         Path to RVIC convolution configuration file or dictionary of
         configuration options.
     """
+    try:
+        # ---------------------------------------------------------------- #
+        # Initilize
+        hist_tapes, data_model, rout_var, time_handle, directories = convolution_init(
+            config
+        )
+        # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Initilize
-    hist_tapes, data_model, rout_var, time_handle, directories = convolution_init(
-        config
-    )
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Run
+        time_handle, hist_tapes = convolution_run(
+            hist_tapes, data_model, rout_var, time_handle, directories
+        )
+        # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Run
-    time_handle, hist_tapes = convolution_run(
-        hist_tapes, data_model, rout_var, time_handle, directories
-    )
-    # ---------------------------------------------------------------- #
-
-    # ---------------------------------------------------------------- #
-    # Finalize
-    convolution_final(time_handle, hist_tapes)
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Finalize
+        convolution_final(time_handle, hist_tapes)
+        # ---------------------------------------------------------------- #
+    
+    except:
+        close_logger()
+        
     return
 
 

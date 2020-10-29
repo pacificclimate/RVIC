@@ -15,29 +15,32 @@ from .core.config import read_config
 # -------------------------------------------------------------------- #
 # Top level driver
 def convert(config_file):
+    try:
+        # ---------------------------------------------------------------- #
+        # Initilize
+        dom_data, new_dom_data, outlets, config_dict, directories = uhs2param_init(
+            config_file
+        )
+        # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Initilize
-    dom_data, new_dom_data, outlets, config_dict, directories = uhs2param_init(
-        config_file
-    )
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Get main logger
+        log = getLogger(LOG_NAME)
+        # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Get main logger
-    log = getLogger(LOG_NAME)
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Run
+        log.info("getting outlets now")
+        outlets = uhs2param_run(dom_data, outlets, config_dict)
+        # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Run
-    log.info("getting outlets now")
-    outlets = uhs2param_run(dom_data, outlets, config_dict)
-    # ---------------------------------------------------------------- #
-
-    # ---------------------------------------------------------------- #
-    # Finally, make the parameter file
-    uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories)
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Finally, make the parameter file
+        uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories)
+        # ---------------------------------------------------------------- #
+    except:
+        close_logger()
+        
     return
 
 
