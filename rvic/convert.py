@@ -2,6 +2,7 @@
 """
 Read a set of uhs files and write an RVIC parameter file
 """
+import atexit
 from logging import getLogger
 from .core.log import init_logger, close_logger, LOG_NAME
 from .core.utilities import make_directories, copy_inputs, read_domain
@@ -18,30 +19,29 @@ def convert(config_file):
     # Get main logger
     log = getLogger(LOG_NAME)
     # ---------------------------------------------------------------- #
-    
-    try:
 
-        # ---------------------------------------------------------------- #
-        # Initilize
-        dom_data, new_dom_data, outlets, config_dict, directories = uhs2param_init(
-            config_file
-        )
-        # ---------------------------------------------------------------- #
+    # ---------------------------------------------------------------- #
+    # Call close_logger at the termination
+    atexit.register(close_logger)
+    # ---------------------------------------------------------------- #
 
-        # ---------------------------------------------------------------- #
-        # Run
-        log.info("getting outlets now")
-        outlets = uhs2param_run(dom_data, outlets, config_dict)
-        # ---------------------------------------------------------------- #
+    # ---------------------------------------------------------------- #
+    # Initilize
+    dom_data, new_dom_data, outlets, config_dict, directories = uhs2param_init(
+        config_file
+    )
+    # ---------------------------------------------------------------- #
 
-        # ---------------------------------------------------------------- #
-        # Finally, make the parameter file
-        uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories)
-        # ---------------------------------------------------------------- #
+    # ---------------------------------------------------------------- #
+    # Run
+    log.info("getting outlets now")
+    outlets = uhs2param_run(dom_data, outlets, config_dict)
+    # ---------------------------------------------------------------- #
 
-    except BaseException as e:
-        log.error(e, exc_info=True)
-        close_logger()
+    # ---------------------------------------------------------------- #
+    # Finally, make the parameter file
+    uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories)
+    # ---------------------------------------------------------------- #
 
     return
 
@@ -154,8 +154,6 @@ def uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories):
     log.info("Location of Inputs: %s", inputs_tar)
     log.info("Location of Log: %s", log_tar)
     log.info("Location of Parmeter File %s", param_file)
-
-    close_logger()
     # ---------------------------------------------------------------- #
     return
 
