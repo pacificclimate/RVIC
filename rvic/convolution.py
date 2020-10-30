@@ -15,7 +15,6 @@ structure.
 Major updates to the...
 """
 import os
-import atexit
 from collections import OrderedDict
 from logging import getLogger
 from .core.log import init_logger, close_logger, LOG_NAME
@@ -47,29 +46,29 @@ def convolution(config):
     log = getLogger(LOG_NAME)
     # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Call close_logger at the termination
-    atexit.register(close_logger)
-    # ---------------------------------------------------------------- #
+    try:
+        # ---------------------------------------------------------------- #
+        # Initilize
+        hist_tapes, data_model, rout_var, time_handle, directories = convolution_init(
+            config
+        )
+        # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Initilize
-    hist_tapes, data_model, rout_var, time_handle, directories = convolution_init(
-        config
-    )
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Run
+        time_handle, hist_tapes = convolution_run(
+            hist_tapes, data_model, rout_var, time_handle, directories
+        )
+        # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Run
-    time_handle, hist_tapes = convolution_run(
-        hist_tapes, data_model, rout_var, time_handle, directories
-    )
-    # ---------------------------------------------------------------- #
-
-    # ---------------------------------------------------------------- #
-    # Finalize
-    convolution_final(time_handle, hist_tapes)
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Finalize
+        convolution_final(time_handle, hist_tapes)
+        # ---------------------------------------------------------------- #
+    
+    except BaseException as e:
+        log.error(e, exc_info=True)
+        close_logger()
 
     return
 
@@ -439,6 +438,8 @@ def convolution_final(time_handle, hist_tapes):
 
     log.info("Done with rvic convolution.")
     log.info("Location of Log: %s", log_tar)
+
+    close_logger()
     # ---------------------------------------------------------------- #
     return
 
