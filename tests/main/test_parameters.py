@@ -15,8 +15,10 @@ config_dict = read_config(config_file)
 @pytest.mark.parametrize(
     ("config", "numofproc"), [(config_file, 2), (config_dict, 2)],
 )
-def test_parameters(config, numofproc):
+def test_parameters(config, numofproc, mocker):
+    mocked_close_logger = mocker.patch("rvic.core.log.close_logger")
     run_test(parameters, config, numofproc)
+    mocked_close_logger.assert_called()
 
 
 def test_invalid_input(mocker):
@@ -24,4 +26,4 @@ def test_invalid_input(mocker):
     mocked_close_logger = mocker.patch("rvic.core.log.close_logger")
     with pytest.raises(BaseException):
         run_test(parameters, invalid_config)
-        mocked_close_logger.assert_called()
+    mocked_close_logger.assert_called()

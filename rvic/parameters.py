@@ -119,6 +119,7 @@ def parameters(config, numofproc=1):
     except BaseException as e:
         log.error(e, exc_info=True)
         close_logger()
+        raise(e)
     
     return
 

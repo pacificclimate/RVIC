@@ -16,8 +16,10 @@ config_dict = read_config(config_file)
 @pytest.mark.parametrize(
     "config", [config_file, config_dict],
 )
-def test_convolution(config):
+def test_convolution(config, mocker):
+    mocked_close_logger = mocker.patch("rvic.core.log.close_logger")
     convolution(config)
+    mocked_close_logger.assert_called()
 
 
 def test_invalid_input(mocker):
