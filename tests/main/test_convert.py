@@ -1,6 +1,7 @@
 import os
 import sys
-from pytest import mark
+import pytest
+from pytest_mock import mocker
 from pkg_resources import resource_filename
 from rvic.convert import convert
 from common import run_test
@@ -10,26 +11,20 @@ from configparser import ConfigParser
 config_file = resource_filename(__name__, "../data/configs/convert.cfg")
 
 
-@mark.parametrize(
-    "config", [config_file],
-)
-def test_convert(config):
-    run_test(convert, config)
+def test_convert():
+    run_test(convert, config_file)
 
 
-@mark.parametrize(
-    "config", [config_file],
-)
-def test_post_convert_close_logger(config):
+def test_invalid_input(mocker):
     with open("/tmp/tmp_convert.cfg", "w") as tmp_file:
         parser = ConfigParser()
-        parser.read(config)
+        parser.read(config_file)
         parser["UHS_FILES"]["STATION_FILE"] = ""
         parser.write(tmp_file)
 
-    try:
-        convert("/tmp/tmp_convert.cfg")
-    except:
-        assert sys.stdout == sys.__stdout__
+    mocked_close_logger = mocker.patch("rvic.core.log.close_logger")
+    with pytest.raises(BaseException):
+        run_test(convert, "/tmp/tmp_convert.cfg")
+        mocked_close_logger.assert_called()
 
     os.remove("/tmp/tmp_convert.cfg")
