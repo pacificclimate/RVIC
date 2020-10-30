@@ -17,7 +17,6 @@ config_dict = read_config(config_file)
     "config", [config_file, config_dict],
 )
 def test_convolution(config):
-    print(config)
     convolution(config)
 
 
