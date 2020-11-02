@@ -21,7 +21,7 @@ def test_convolution(config):
 
 def test_invalid_input():
     invalid_config = config_dict
-    invalid_config["DOMAIN"]["FILE_NAME"] = "./tests/data/samples/invalid_domain.nc"
+    invalid_config["INPUT_FORCINGS"]["DATL_PATH"] = "./tests/data/samples/"
 
     with pytest.raises(FileNotFoundError):
         convolution(invalid_config)
