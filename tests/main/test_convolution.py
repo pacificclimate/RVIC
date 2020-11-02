@@ -1,7 +1,6 @@
 import os
 import sys
 import pytest
-from pytest_mock import mocker
 from pkg_resources import resource_filename
 from rvic.convolution import convolution
 from common import run_test
@@ -16,15 +15,15 @@ config_dict = read_config(config_file)
 @pytest.mark.parametrize(
     "config", [config_file, config_dict],
 )
-def test_convolution(config, mocker):
-    mocked_close_logger = mocker.patch("rvic.core.log.close_logger")
+def test_convolution(config):
     convolution(config)
-    mocked_close_logger.assert_called()
 
 
-def test_invalid_input(mocker):
-    invalid_config = config_dict["OPTIONS"]["CALENDAR"] = ""
-    mocked_close_logger = mocker.patch("rvic.core.log.close_logger")
-    with pytest.raises(BaseException):
-        run_test(convolution, invalid_config)
-        mocked_close_logger.assert_called()
+def test_invalid_input():
+    invalid_config = config_dict
+    invalid_config["DOMAIN"]["FILE_NAME"] = "./tests/data/samples/invalid_domain.nc"
+
+    with pytest.raises(FileNotFoundError):
+        convolution(invalid_config)
+        assert sys.stdout == sys.__stdout__
+        assert sys.stdout == sys.__stderr__

@@ -1,7 +1,6 @@
 import os
 import sys
 import pytest
-from pytest_mock import mocker
 from pkg_resources import resource_filename
 from rvic.parameters import parameters
 from common import run_test
@@ -15,15 +14,17 @@ config_dict = read_config(config_file)
 @pytest.mark.parametrize(
     ("config", "numofproc"), [(config_file, 2), (config_dict, 2)],
 )
-def test_parameters(config, numofproc, mocker):
-    mocked_close_logger = mocker.patch("rvic.core.log.close_logger")
+def test_parameters(config, numofproc):
     run_test(parameters, config, numofproc)
-    mocked_close_logger.assert_called()
+    assert sys.stdout == sys.__stdout__
+    assert sys.stderr == sys.__stderr__
 
 
-def test_invalid_input(mocker):
-    invalid_config = config_dict["OPTIONS"]["CASEID"] = ""
-    mocked_close_logger = mocker.patch("rvic.core.log.close_logger")
-    with pytest.raises(BaseException):
-        run_test(parameters, invalid_config)
-    mocked_close_logger.assert_called()
+def test_invalid_input():
+    invalid_config = config_dict
+    invalid_config["DOMAIN"]["FILE_NAME"] = "./tests/data/samples/invalid_domain.nc"
+
+    with pytest.raises(FileNotFoundError):
+        parameters(invalid_config)
+        assert sys.stdout == sys.__stdout__
+        assert sys.stderr == sys.__stderr__
