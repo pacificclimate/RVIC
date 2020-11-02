@@ -21,6 +21,7 @@ def test_convert(config):
 def test_invalid_input():
     with open("/tmp/tmp_convert.cfg", "w") as tmp_file:
         parser = ConfigParser()
+        parser.optionxform = str
         parser.read(config_file)
         parser["DOMAIN"]["FILE_NAME"] = "./tests/data/samples/invalid_domain.nc"
         parser.write(tmp_file)
