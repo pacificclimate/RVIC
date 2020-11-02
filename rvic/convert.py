@@ -55,22 +55,14 @@ def uhs2param_init(config_file):
     # ---------------------------------------------------------------- #
     # Read Configuration files
     config_dict = read_config(config_file)
+    options = config_dict["OPTIONS"]
     # ---------------------------------------------------------------- #
 
     # ---------------------------------------------------------------- #
     # Setup Directory Structures
     directories = make_directories(
-        config_dict["OPTIONS"]["CASE_DIR"], ["plots", "logs", "params", "inputs"]
+        options["CASE_DIR"], ["plots", "logs", "params", "inputs"]
     )
-    # ---------------------------------------------------------------- #
-
-    # ---------------------------------------------------------------- #
-    # copy inputs to $case_dir/inputs and update configuration
-    config_dict = copy_inputs(config_file, directories["inputs"])
-    options = config_dict["OPTIONS"]
-    config_dict["POUR_POINTS"] = {"FILE_NAME": config_dict["UHS_FILES"]["STATION_FILE"]}
-    config_dict["ROUTING"]["FILE_NAME"] = "unknown"
-    config_dict["UH_BOX"] = {"FILE_NAME": "unknown"}
     # ---------------------------------------------------------------- #
 
     # ---------------------------------------------------------------- #
@@ -79,6 +71,14 @@ def uhs2param_init(config_file):
 
     for direc in directories:
         log.info("%s directory is %s", direc, directories[direc])
+    # ---------------------------------------------------------------- #
+
+    # ---------------------------------------------------------------- #
+    # copy inputs to $case_dir/inputs and update configuration
+    config_dict = copy_inputs(config_file, directories["inputs"])
+    config_dict["POUR_POINTS"] = {"FILE_NAME": config_dict["UHS_FILES"]["STATION_FILE"]}
+    config_dict["ROUTING"]["FILE_NAME"] = "unknown"
+    config_dict["UH_BOX"] = {"FILE_NAME": "unknown"}
     # ---------------------------------------------------------------- #
 
     # ---------------------------------------------------------------- #
