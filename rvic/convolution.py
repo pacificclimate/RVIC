@@ -41,25 +41,34 @@ def convolution(config):
         Path to RVIC convolution configuration file or dictionary of
         configuration options.
     """
-
     # ---------------------------------------------------------------- #
-    # Initilize
-    hist_tapes, data_model, rout_var, time_handle, directories = convolution_init(
-        config
-    )
+    # Get main logger
+    log = getLogger(LOG_NAME)
     # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Run
-    time_handle, hist_tapes = convolution_run(
-        hist_tapes, data_model, rout_var, time_handle, directories
-    )
-    # ---------------------------------------------------------------- #
+    try:
+        # ---------------------------------------------------------------- #
+        # Initilize
+        hist_tapes, data_model, rout_var, time_handle, directories = convolution_init(
+            config
+        )
+        # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Finalize
-    convolution_final(time_handle, hist_tapes)
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Run
+        time_handle, hist_tapes = convolution_run(
+            hist_tapes, data_model, rout_var, time_handle, directories
+        )
+        # ---------------------------------------------------------------- #
+
+        # ---------------------------------------------------------------- #
+        # Finalize
+        convolution_final(time_handle, hist_tapes)
+        # ---------------------------------------------------------------- #
+
+    finally:
+        close_logger()
+
     return
 
 
@@ -428,8 +437,6 @@ def convolution_final(time_handle, hist_tapes):
 
     log.info("Done with rvic convolution.")
     log.info("Location of Log: %s", log_tar)
-
-    close_logger()
     # ---------------------------------------------------------------- #
     return
 

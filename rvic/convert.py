@@ -2,7 +2,6 @@
 """
 Read a set of uhs files and write an RVIC parameter file
 """
-
 from logging import getLogger
 from .core.log import init_logger, close_logger, LOG_NAME
 from .core.utilities import make_directories, copy_inputs, read_domain
@@ -15,29 +14,34 @@ from .core.config import read_config
 # -------------------------------------------------------------------- #
 # Top level driver
 def convert(config_file):
-
-    # ---------------------------------------------------------------- #
-    # Initilize
-    dom_data, new_dom_data, outlets, config_dict, directories = uhs2param_init(
-        config_file
-    )
-    # ---------------------------------------------------------------- #
-
     # ---------------------------------------------------------------- #
     # Get main logger
     log = getLogger(LOG_NAME)
     # ---------------------------------------------------------------- #
+    
+    try:
 
-    # ---------------------------------------------------------------- #
-    # Run
-    log.info("getting outlets now")
-    outlets = uhs2param_run(dom_data, outlets, config_dict)
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Initilize
+        dom_data, new_dom_data, outlets, config_dict, directories = uhs2param_init(
+            config_file
+        )
+        # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Finally, make the parameter file
-    uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories)
-    # ---------------------------------------------------------------- #
+        # ---------------------------------------------------------------- #
+        # Run
+        log.info("getting outlets now")
+        outlets = uhs2param_run(dom_data, outlets, config_dict)
+        # ---------------------------------------------------------------- #
+
+        # ---------------------------------------------------------------- #
+        # Finally, make the parameter file
+        uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories)
+        # ---------------------------------------------------------------- #
+
+    finally:
+        close_logger()
+
     return
 
 
@@ -51,22 +55,14 @@ def uhs2param_init(config_file):
     # ---------------------------------------------------------------- #
     # Read Configuration files
     config_dict = read_config(config_file)
+    options = config_dict["OPTIONS"]
     # ---------------------------------------------------------------- #
 
     # ---------------------------------------------------------------- #
     # Setup Directory Structures
     directories = make_directories(
-        config_dict["OPTIONS"]["CASE_DIR"], ["plots", "logs", "params", "inputs"]
+        options["CASE_DIR"], ["plots", "logs", "params", "inputs"]
     )
-    # ---------------------------------------------------------------- #
-
-    # ---------------------------------------------------------------- #
-    # copy inputs to $case_dir/inputs and update configuration
-    config_dict = copy_inputs(config_file, directories["inputs"])
-    options = config_dict["OPTIONS"]
-    config_dict["POUR_POINTS"] = {"FILE_NAME": config_dict["UHS_FILES"]["STATION_FILE"]}
-    config_dict["ROUTING"]["FILE_NAME"] = "unknown"
-    config_dict["UH_BOX"] = {"FILE_NAME": "unknown"}
     # ---------------------------------------------------------------- #
 
     # ---------------------------------------------------------------- #
@@ -75,6 +71,14 @@ def uhs2param_init(config_file):
 
     for direc in directories:
         log.info("%s directory is %s", direc, directories[direc])
+    # ---------------------------------------------------------------- #
+
+    # ---------------------------------------------------------------- #
+    # copy inputs to $case_dir/inputs and update configuration
+    config_dict = copy_inputs(config_file, directories["inputs"])
+    config_dict["POUR_POINTS"] = {"FILE_NAME": config_dict["UHS_FILES"]["STATION_FILE"]}
+    config_dict["ROUTING"]["FILE_NAME"] = "unknown"
+    config_dict["UH_BOX"] = {"FILE_NAME": "unknown"}
     # ---------------------------------------------------------------- #
 
     # ---------------------------------------------------------------- #
@@ -149,8 +153,6 @@ def uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories):
     log.info("Location of Inputs: %s", inputs_tar)
     log.info("Location of Log: %s", log_tar)
     log.info("Location of Parmeter File %s", param_file)
-
-    close_logger()
     # ---------------------------------------------------------------- #
     return
 

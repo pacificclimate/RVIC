@@ -46,75 +46,79 @@ def parameters(config, numofproc=1):
     numofproc : int
         Number of processors to use when developing RVIC parameters.
     """
-
-    # ---------------------------------------------------------------- #
-    # Initilize
-    (
-        uh_box,
-        fdr_data,
-        fdr_vatts,
-        dom_data,
-        outlets,
-        config_dict,
-        directories,
-    ) = gen_uh_init(config)
-    # ---------------------------------------------------------------- #
-
     # ---------------------------------------------------------------- #
     # Get main logger
     log = getLogger(LOG_NAME)
     # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Run
-    if numofproc > 1:
-        from multiprocessing import Pool
+    try:
+        # ---------------------------------------------------------------- #
+        # Initialize
+        (
+            uh_box,
+            fdr_data,
+            fdr_vatts,
+            dom_data,
+            outlets,
+            config_dict,
+            directories,
+        ) = gen_uh_init(config)
+        # ---------------------------------------------------------------- #
 
-        pool = Pool(processes=numofproc)
-        status = []
+        # ---------------------------------------------------------------- #
+        # Run
+        if numofproc > 1:
+            from multiprocessing import Pool
 
-        for i, (key, outlet) in enumerate(iteritems(outlets)):
-            log.info("On Outlet #%s of %s", i + 1, len(outlets))
-            stat = pool.apply_async(
-                gen_uh_run,
-                (
-                    uh_box,
-                    fdr_data,
-                    fdr_vatts,
-                    dom_data,
-                    outlet,
-                    config_dict,
-                    directories,
-                ),
-                callback=store_result,
-                error_callback=error,
-            )
-            # Store the result
-            status.append(stat)
+            pool = Pool(processes=numofproc)
+            status = []
 
-        # Close the pool
-        pool.close()
+            for i, (key, outlet) in enumerate(iteritems(outlets)):
+                log.info("On Outlet #%s of %s", i + 1, len(outlets))
+                stat = pool.apply_async(
+                    gen_uh_run,
+                    (
+                        uh_box,
+                        fdr_data,
+                        fdr_vatts,
+                        dom_data,
+                        outlet,
+                        config_dict,
+                        directories,
+                    ),
+                    callback=store_result,
+                    error_callback=error,
+                )
+                # Store the result
+                status.append(stat)
 
-        # Check that everything worked
-        [stat.get() for stat in status]
+            # Close the pool
+            pool.close()
 
-        pool.join()
+            # Check that everything worked
+            [stat.get() for stat in status]
 
-        outlets = OrderedDict(sorted(results.items(), reverse=True))
-    else:
-        for i, (key, outlet) in enumerate(iteritems(outlets)):
-            outlet = gen_uh_run(
-                uh_box, fdr_data, fdr_vatts, dom_data, outlet, config_dict, directories
-            )
+            pool.join()
 
-    if not outlets:
-        raise ValueError("outlets in parameters are empty")
-    # ---------------------------------------------------------------- #
+            outlets = OrderedDict(sorted(results.items(), reverse=True))
+        else:
+            for i, (key, outlet) in enumerate(iteritems(outlets)):
+                outlet = gen_uh_run(
+                    uh_box, fdr_data, fdr_vatts, dom_data, outlet, config_dict, directories
+                )
 
-    # ---------------------------------------------------------------- #
-    # Finally, make the parameter file
-    gen_uh_final(outlets, dom_data, config_dict, directories)
-    # ---------------------------------------------------------------- #
+        if not outlets:
+            raise ValueError("outlets in parameters are empty")
+        # ---------------------------------------------------------------- #
+
+        # ---------------------------------------------------------------- #
+        # Finally, make the parameter file
+        gen_uh_final(outlets, dom_data, config_dict, directories)
+        # ---------------------------------------------------------------- #
+    
+    finally:
+        close_logger()
+    
     return
 
 
@@ -685,8 +689,6 @@ def gen_uh_final(outlets, dom_data, config_dict, directories):
     log.info("Location of Inputs: %s", inputs_tar)
     log.info("Location of Log: %s", log_tar)
     log.info("Location of Parmeter File %s", param_file)
-
-    close_logger()
     # ---------------------------------------------------------------- #
     return
 
