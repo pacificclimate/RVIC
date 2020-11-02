@@ -1,10 +1,9 @@
 import os
-import sys
 import pytest
 from pkg_resources import resource_filename
 from rvic.convert import convert
 from rvic.core.log import close_logger
-from common import run_test
+from common import run_test, check_close_logger_call
 from configparser import ConfigParser, InterpolationMissingOptionError
 
 
@@ -16,6 +15,7 @@ config_file = resource_filename(__name__, "../data/configs/convert.cfg")
 )
 def test_convert(config):
     run_test(convert, config)
+    check_close_logger_call()
 
 
 def test_invalid_input():
@@ -27,7 +27,6 @@ def test_invalid_input():
 
     with pytest.raises(InterpolationMissingOptionError):
         convert("/tmp/tmp_convert.cfg")
-    assert sys.stdout == sys.__stdout__
-    assert sys.stderr == sys.__stderr__
+    check_close_logger_call()
 
     os.remove("/tmp/tmp_convert.cfg")

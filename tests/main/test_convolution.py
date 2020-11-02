@@ -1,9 +1,8 @@
 import os
-import sys
 import pytest
 from pkg_resources import resource_filename
 from rvic.convolution import convolution
-from common import run_test
+from common import run_test, check_close_logger_call
 from rvic.core.config import read_config
 
 
@@ -17,6 +16,7 @@ config_dict = read_config(config_file)
 )
 def test_convolution(config):
     convolution(config)
+    check_close_logger_call()
 
 
 def test_invalid_input():
@@ -25,5 +25,4 @@ def test_invalid_input():
 
     with pytest.raises(FileNotFoundError):
         convolution(invalid_config)
-    assert sys.stdout == sys.__stdout__
-    assert sys.stderr == sys.__stderr__
+    check_close_logger_call()

@@ -1,8 +1,14 @@
 import cProfile
 import io
+import sys
 import pstats
 
 from rvic.core.pycompat import py3
+
+
+def check_close_logger_call():
+    assert sys.stdout == sys.__stdout__
+    assert sys.stderr == sys.__stderr__
 
 
 def run_test(rvic_module, config, np=None):
