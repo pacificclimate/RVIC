@@ -65,11 +65,9 @@ def convolution(config):
         # Finalize
         convolution_final(time_handle, hist_tapes)
         # ---------------------------------------------------------------- #
-    
-    except BaseException as e:
-        log.error(e, exc_info=True)
+
+    finally:
         close_logger()
-        raise(e)
 
     return
 
@@ -439,8 +437,6 @@ def convolution_final(time_handle, hist_tapes):
 
     log.info("Done with rvic convolution.")
     log.info("Location of Log: %s", log_tar)
-
-    close_logger()
     # ---------------------------------------------------------------- #
     return
 

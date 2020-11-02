@@ -116,10 +116,8 @@ def parameters(config, numofproc=1):
         gen_uh_final(outlets, dom_data, config_dict, directories)
         # ---------------------------------------------------------------- #
     
-    except BaseException as e:
-        log.error(e, exc_info=True)
+    finally:
         close_logger()
-        raise(e)
     
     return
 
@@ -691,8 +689,6 @@ def gen_uh_final(outlets, dom_data, config_dict, directories):
     log.info("Location of Inputs: %s", inputs_tar)
     log.info("Location of Log: %s", log_tar)
     log.info("Location of Parmeter File %s", param_file)
-
-    close_logger()
     # ---------------------------------------------------------------- #
     return
 
