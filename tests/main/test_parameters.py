@@ -26,5 +26,5 @@ def test_invalid_input():
 
     with pytest.raises(FileNotFoundError):
         parameters(invalid_config)
-        assert sys.stdout == sys.__stdout__
-        assert sys.stderr == sys.__stderr__
+    assert sys.stdout == sys.__stdout__
+    assert sys.stderr == sys.__stderr__

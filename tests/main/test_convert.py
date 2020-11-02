@@ -27,7 +27,7 @@ def test_invalid_input():
 
     with pytest.raises(InterpolationMissingOptionError):
         convert("/tmp/tmp_convert.cfg")
-        assert sys.stdout == sys.__stdout__
-        assert sys.stdout == sys.__stderr__
+    assert sys.stdout == sys.__stdout__
+    assert sys.stderr == sys.__stderr__
 
     os.remove("/tmp/tmp_convert.cfg")

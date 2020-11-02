@@ -25,5 +25,5 @@ def test_invalid_input():
 
     with pytest.raises(FileNotFoundError):
         convolution(invalid_config)
-        assert sys.stdout == sys.__stdout__
-        assert sys.stdout == sys.__stderr__
+    assert sys.stdout == sys.__stdout__
+    assert sys.stderr == sys.__stderr__
