@@ -26,7 +26,7 @@ def test_invalid_input():
         parser["DOMAIN"]["FILE_NAME"] = "./tests/data/samples/invalid_domain.nc"
         parser.write(tmp_file)
 
-    with pytest.raises(InterpolationMissingOptionError):
+    with pytest.raises(FileNotFoundError):
         convert("/tmp/tmp_convert.cfg")
     check_close_logger_call()
 
