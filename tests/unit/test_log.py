@@ -1,18 +1,13 @@
 import pytest
-from rvic.core.log import StreamToFile
+from rvic.core.log import init_logger, close_logger
+import sys
 
 
-def test_setup_stream():
-    stream = StreamToFile()
-    stream.write("buf")
-    stream.flush()
+def test_logger():
+    logger = init_logger(log_dir="/tmp", log_level="DEBUG", verbose=False)
+    with open(logger.filename, "r") as log_file:
+        assert log_file.readlines()[3].split()[-1] == logger.filename
 
-
-def test_stream_raises_with_bad_log_level():
-    with pytest.raises(TypeError):
-        stream = StreamToFile(log_level="junk")
-        stream.write("buf")
-        stream.flush()
-
-
-# Cannot test logger in interactive session or using pytest
+    close_logger()
+    with open(logger.filename, "r") as log_file:
+        assert log_file.readlines()[-1].split(">>")[0] == "INFO:close_logger"

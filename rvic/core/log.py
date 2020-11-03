@@ -12,31 +12,6 @@ LOG_NAME = "rvic"
 FORMATTER = logging.Formatter("%(levelname)s:%(funcName)s>> %(message)s")
 # -------------------------------------------------------------------- #
 
-
-# -------------------------------------------------------------------- #
-# Fake stream file to handle stdin/stdout
-class StreamToFile(object):
-    """
-    Fake file-like stream object that redirects writes to a logger instance.
-    http://www.electricmonk.nl/log/2011/08/14/redirect-stdout-and-stderr-to-a-logger-in-python/
-    """
-
-    def __init__(self, logger_name=LOG_NAME, log_level=logging.INFO):
-        self.logger = logging.getLogger(logger_name)
-        self.log_level = log_level
-        self.linebuf = ""
-
-    def write(self, buf):
-        for line in buf.rstrip().splitlines():
-            self.logger.log(self.log_level, line.rstrip())
-
-    def flush(self):
-        pass
-
-
-# -------------------------------------------------------------------- #
-
-
 def init_logger(log_dir="./", log_level="DEBUG", verbose=False):
     """ Setup the logger """
 
@@ -69,12 +44,6 @@ def init_logger(log_dir="./", log_level="DEBUG", verbose=False):
         logger.addHandler(ch)
     # ---------------------------------------------------------------- #
 
-    # ---------------------------------------------------------------- #
-    # Redirect stdout and stderr to logger
-    sys.stdout = StreamToFile()
-    sys.stderr = StreamToFile(log_level=logging.ERROR)
-    # ---------------------------------------------------------------- #
-
     logger.info("-------------------- INITIALIZED RVIC LOG ------------------")
     logger.info("LOG LEVEL: %s", log_level)
     logger.info("Logging To Console: %s", verbose)
@@ -85,7 +54,6 @@ def init_logger(log_dir="./", log_level="DEBUG", verbose=False):
 
 
 # -------------------------------------------------------------------- #
-
 
 def close_logger():
     """Close the handlers of the logger"""
