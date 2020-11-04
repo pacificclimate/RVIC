@@ -1,5 +1,11 @@
 # News / Release Notes
 
+## 1.1.4
+
+*03-November-2020*
+
+* Modify `init_logger` not to redirect `sys.stdout` and `sys.stdin` [(#10)[https://github.com/pacificclimate/rvic-daccs/issues/10]]
+
 ## 1.1.3
 
 *02-November-2020*
