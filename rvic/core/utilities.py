@@ -7,7 +7,7 @@ import tarfile
 from scipy.spatial import cKDTree
 import numpy as np
 from shutil import rmtree, copyfile
-from .pycompat import iteritems, SafeConfigParser
+from .pycompat import iteritems, ConfigParser
 from netCDF4 import Dataset
 from logging import getLogger
 from .log import LOG_NAME
@@ -109,7 +109,7 @@ def write_rpointer(restart_dir, restart_file, timestamp):
     """ Write a configuration file with restart file and time """
     rpointer_file = os.path.join(restart_dir, RPOINTER)
 
-    config = SafeConfigParser()
+    config = ConfigParser()
     config.optionxform = str
 
     time_str = timestamp.strftime(TIMESTAMPFORM)
@@ -250,7 +250,7 @@ def copy_inputs(config_file, inputs_dir):
 
     config_dict = read_config(config_file)
 
-    config = SafeConfigParser()
+    config = ConfigParser()
     config.optionxform = str
     config.read(config_file)
 
