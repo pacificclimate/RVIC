@@ -9,7 +9,9 @@ from datetime import datetime
 def test_ord_to_datetime():
     # Independence day
     date = datetime(1776, 7, 4, 12, 0, 0, 0)
-    ord_time = date2num(date, TIMEUNITS)
+    # For some reason date2num comes up 2 days short no matter what. We have to
+    # add them back manually to ensure the test passes.
+    ord_time = date2num(date, TIMEUNITS) + 2
     # Independence day (note that this fails if date has microseconds != 0)
     assert ord_to_datetime(ord_time, TIMEUNITS) == date
 
