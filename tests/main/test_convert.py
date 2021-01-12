@@ -1,7 +1,6 @@
 import os
 import pytest
 from pathlib import Path
-from pkg_resources import resource_filename
 from rvic.convert import convert
 from rvic.core.log import close_logger
 from common import run_test, check_close_logger_call
