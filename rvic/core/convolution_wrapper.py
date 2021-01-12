@@ -8,11 +8,16 @@ gcc -shared -o rvic_convolution.so rvic_convolution.c
 """
 
 import os
-import sysconfig
+import distutils.sysconfig
+import sys
 import numpy as np
 import ctypes
 
-SHAREDOBJECT = "rvic_convolution" + sysconfig.get_config_var("SO")
+ext_suffix_var = "SO"
+if sys.version_info[:2] >= (3, 5):
+    ext_suffix_var = "EXT_SUFFIX"
+
+SHAREDOBJECT = "rvic_convolution" + distutils.sysconfig.get_config_var(ext_suffix_var)
 LIBPATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 
 try:

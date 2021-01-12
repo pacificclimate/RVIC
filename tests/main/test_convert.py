@@ -1,5 +1,6 @@
 import os
 import pytest
+from pathlib import Path
 from pkg_resources import resource_filename
 from rvic.convert import convert
 from rvic.core.log import close_logger
@@ -7,7 +8,7 @@ from common import run_test, check_close_logger_call
 from configparser import ConfigParser, InterpolationMissingOptionError
 
 
-config_file = resource_filename(__name__, "../data/configs/convert.cfg")
+config_file = str(Path(__file__).parents[1]) + "/data/configs/convert.cfg"
 
 
 @pytest.mark.parametrize(

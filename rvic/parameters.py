@@ -104,7 +104,13 @@ def parameters(config, numofproc=1):
         else:
             for i, (key, outlet) in enumerate(iteritems(outlets)):
                 outlet = gen_uh_run(
-                    uh_box, fdr_data, fdr_vatts, dom_data, outlet, config_dict, directories
+                    uh_box,
+                    fdr_data,
+                    fdr_vatts,
+                    dom_data,
+                    outlet,
+                    config_dict,
+                    directories,
                 )
 
         if not outlets:
@@ -115,10 +121,10 @@ def parameters(config, numofproc=1):
         # Finally, make the parameter file
         gen_uh_final(outlets, dom_data, config_dict, directories)
         # ---------------------------------------------------------------- #
-    
+
     finally:
         close_logger()
-    
+
     return
 
 

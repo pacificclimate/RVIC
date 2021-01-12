@@ -12,6 +12,7 @@ LOG_NAME = "rvic"
 FORMATTER = logging.Formatter("%(levelname)s:%(funcName)s>> %(message)s")
 # -------------------------------------------------------------------- #
 
+
 def init_logger(log_dir="./", log_level="DEBUG", verbose=False):
     """ Setup the logger """
 
@@ -55,6 +56,7 @@ def init_logger(log_dir="./", log_level="DEBUG", verbose=False):
 
 # -------------------------------------------------------------------- #
 
+
 def close_logger():
     """Close the handlers of the logger"""
     log = logging.getLogger(LOG_NAME)
@@ -67,5 +69,6 @@ def close_logger():
         i.close()
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
+
 
 # -------------------------------------------------------------------- #

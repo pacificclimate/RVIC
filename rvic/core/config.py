@@ -5,7 +5,7 @@ config.py
 """
 
 import os
-from .pycompat import OrderedDict, SafeConfigParser
+from .pycompat import OrderedDict, ConfigParser
 
 
 class Config(object):
@@ -31,7 +31,7 @@ def read_config(config_file):
     """
     Return a dictionary with subdictionaries of all configFile options/values
     """
-    config = SafeConfigParser()
+    config = ConfigParser()
     config.optionxform = str
     config.read(config_file)
     sections = config.sections()

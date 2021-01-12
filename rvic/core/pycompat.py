@@ -19,7 +19,7 @@ if py3:
 
     pyrange = range
     pyzip = zip
-    from configparser import SafeConfigParser
+    from configparser import ConfigParser
 else:
     # Python 2
     basestring = basestring
@@ -34,7 +34,7 @@ else:
 
     pyrange = xrange
     from itertools import izip as pyzip
-    from ConfigParser import SafeConfigParser
+    import ConfigParser
 try:
     from cyordereddict import OrderedDict
 except ImportError:
