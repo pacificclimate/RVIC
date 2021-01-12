@@ -1,12 +1,12 @@
 import os
 import pytest
-from pkg_resources import resource_filename
+from pathlib import Path
 from rvic.parameters import parameters
 from common import run_test, check_close_logger_call
 from rvic.core.config import read_config
 
 
-config_file = resource_filename(__name__, "../data/configs/parameters.cfg")
+config_file = str(Path(__file__).parents[1]) + "/data/configs/parameters.cfg"
 config_dict = read_config(config_file)
 
 
