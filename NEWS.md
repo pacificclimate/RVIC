@@ -1,5 +1,11 @@
 # News / Release Notes
 
+## 1.1.5
+
+*14-January-2021*
+
+* Reduce warnings and fix time utility test
+
 ## 1.1.4
 
 *03-November-2020*
