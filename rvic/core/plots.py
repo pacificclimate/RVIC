@@ -3,6 +3,7 @@
 plots.py
 """
 import os
+import copy
 import logging
 from .log import LOG_NAME
 import numpy as np
@@ -63,7 +64,7 @@ def _fractions_grid(data, dom_x, dom_y, title, case_id, plot_dir):
     mask = data <= 0.0
     data = np.ma.array(data, mask=mask)
 
-    cmap = matplotlib.cm.cool
+    cmap = copy.copy(matplotlib.cm.get_cmap("cool"))
     cmap.set_bad(color="w")
 
     fig = plt.figure()

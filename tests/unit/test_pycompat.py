@@ -6,7 +6,7 @@ from rvic.core.pycompat import (
     iteritems,
     itervalues,
     OrderedDict,
-    SafeConfigParser,
+    ConfigParser,
 )
 
 
@@ -86,4 +86,4 @@ def test_ordered_dict_append():
 
 
 def test_init_safe_config_parser():
-    SafeConfigParser()
+    ConfigParser()

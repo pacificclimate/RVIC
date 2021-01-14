@@ -1,12 +1,13 @@
 import os
 import pytest
+from pathlib import Path
 from pkg_resources import resource_filename
 from rvic.convolution import convolution
 from common import run_test, check_close_logger_call
 from rvic.core.config import read_config
 
 
-config_file = resource_filename(__name__, "../data/configs/convolve.cfg")
+config_file = str(Path(__file__).parents[1]) + "/data/configs/convolve.cfg"
 config_dict = read_config(config_file)
 
 
