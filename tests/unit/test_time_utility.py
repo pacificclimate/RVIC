@@ -3,14 +3,17 @@
 from rvic.core.time_utility import ord_to_datetime, Dtime
 from rvic.core.share import TIMEUNITS
 from netCDF4 import date2num
-from datetime import datetime
+import cftime
 
 
 def test_ord_to_datetime():
     # Independence day
-    date = datetime(1776, 7, 4, 12, 0, 0, 0)
+    date = cftime.DatetimeGregorian(1776, 7, 4, 12, 0, 0, 0)
+    print(date)
     ord_time = date2num(date, TIMEUNITS)
+    print(ord_time)
     # Independence day (note that this fails if date has microseconds != 0)
+    print(ord_to_datetime(ord_time, TIMEUNITS))
     assert ord_to_datetime(ord_time, TIMEUNITS) == date
 
 
