@@ -127,7 +127,7 @@ setup(
         "numpy >= 1.8",
         "netCDF4 >= 1.0.6",
         "matplotlib >= 1.3.1",
-        "pandas >= 0.15.1",
+        "pandas >= 1.0",
     ],
     extras_require={"test": ["pytest >= 2.5.2"]},
     url="https://github.com/UW-Hydro/RVIC",
