@@ -1,5 +1,11 @@
 # News / Release Notes
 
+## 1.1.6
+
+*20-July-2021*
+
+* Fix shape mismatch error when inputting multiple pour points
+
 ## 1.1.5
 
 *14-January-2021*
