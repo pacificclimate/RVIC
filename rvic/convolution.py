@@ -66,6 +66,8 @@ def convolution(config):
 
         # ---------------------------------------------------------------- #
         # Finalize
+        event.set()
+        listener_thread.join()
         convolution_final(time_handle, hist_tapes)
         # ---------------------------------------------------------------- #
 
