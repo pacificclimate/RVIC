@@ -60,7 +60,7 @@ def convolution(config):
         # ---------------------------------------------------------------- #
         # Run
         time_handle, hist_tapes = convolution_run(
-            hist_tapes, data_model, rout_var, time_handle, directories
+            hist_tapes, data_model, rout_var, time_handle, directories, shared_timestamp
         )
         # ---------------------------------------------------------------- #
 
@@ -304,7 +304,7 @@ def convolution_init(config):
 
 
 # -------------------------------------------------------------------- #
-def convolution_run(hist_tapes, data_model, rout_var, time_handle, directories):
+def convolution_run(hist_tapes, data_model, rout_var, time_handle, directories, shared_timestamp):
     """
     Main run loop for RVIC model.
 
@@ -320,6 +320,8 @@ def convolution_run(hist_tapes, data_model, rout_var, time_handle, directories):
         Dtime instance containing information about run length, time
     directories : dict
         Dictionary of directories created by this function.
+    shared_timestamp: multiprocessing.Manager.Value
+        Shared memory segment containing timestamp currently being read
 
     Returns
     ----------
@@ -354,6 +356,7 @@ def convolution_run(hist_tapes, data_model, rout_var, time_handle, directories):
     while True:
         # ------------------------------------------------------------ #
         # Get this time_handlesteps forcing
+        shared_timestamp.value = timestamp
         runin = data_model.read(timestamp)
 
         for tracer in RVIC_TRACERS:
