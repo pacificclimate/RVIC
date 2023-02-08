@@ -17,12 +17,15 @@ Major updates to the...
 import os
 from collections import OrderedDict
 from logging import getLogger
+from multiprocessing import Manager
+from ctypes import c_wchar_p
+from threading import Thread, Event
 from .core.log import init_logger, close_logger, LOG_NAME
 from .core.utilities import make_directories, read_domain
 from .core.utilities import write_rpointer, tar_inputs
 from .core.variables import Rvar
 from .core.time_utility import Dtime
-from .core.read_forcing import DataModel
+from .core.read_forcing import DataModel, send_timestamp
 from .core.history import Tape
 from .core.share import NcGlobals, RVIC_TRACERS
 from .core.config import read_config
@@ -49,7 +52,7 @@ def convolution(config):
     try:
         # ---------------------------------------------------------------- #
         # Initilize
-        hist_tapes, data_model, rout_var, time_handle, directories = convolution_init(
+        hist_tapes, data_model, rout_var, time_handle, directories, shared_timestamp, listener_thread, event = convolution_init(
             config
         )
         # ---------------------------------------------------------------- #
@@ -90,6 +93,7 @@ def convolution_init(config):
         - Load the RVIC parameter file
         - Load the initial state file and put it in convolution rings
         - Setup time and history file objects
+        - Initialize thread to listen for oncoming clients requesting current timestamp
 
     Parameters
     ----------
@@ -114,6 +118,12 @@ def convolution_init(config):
         Dictionary of directories created by this function.
     config_dict : dict
         Dictionary of values from the configuration file.
+    shared_timestamp: multiprocessing.Manager.Value
+        Shared memory segment containing timestamp currently being read
+    listener_thread: threading.Thread
+        Thread that runs function to listen for oncoming clients and send current timestamp
+    event: threading.Event
+        Event that causes the listener thread to terminate when it's set at the end of convolution
     """
 
     # ---------------------------------------------------------------- #
@@ -277,7 +287,17 @@ def convolution_init(config):
         tape.write_initial()
     # ---------------------------------------------------------------- #
 
-    return hist_tapes, data_model, rout_var, time_handle, directories
+    # ---------------------------------------------------------------- #
+    # create shared timestamp between Convolution process and Listener
+    manager = Manager()
+    shared_timestamp = manager.Value(c_wchar_p, time_handle.timestamp)
+
+    # initialize thread to create a Listener and event to stop this thread when needed
+    event = Event()
+    listener_thread = Thread(target=send_timestamp, args=(shared_timestamp, event))
+    listener_thread.start()
+    # ---------------------------------------------------------------- #
+    return hist_tapes, data_model, rout_var, time_handle, directories, shared_timestamp, listener_thread, event
 
 
 # -------------------------------------------------------------------- #
