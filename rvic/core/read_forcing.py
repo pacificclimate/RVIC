@@ -24,7 +24,7 @@ log = getLogger(LOG_NAME)
 # -------------------------------------------------------------------- #
 # create Listener to send timestamp information to connecting Client
 def send_timestamp(timestamp, event):
-    address = ("osprey-flask-app-progress", 5005)
+    address = ("localhost", 5005)
     with Listener(address) as listener:
         listener._listener._socket.settimeout(0.5) # Ensure that listener is not always waiting for connection in case there is no Client
         while not event.is_set():
