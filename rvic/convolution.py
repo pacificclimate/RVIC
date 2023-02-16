@@ -49,6 +49,8 @@ def convolution(config):
     log = getLogger(LOG_NAME)
     # ---------------------------------------------------------------- #
 
+    event = None
+    listener_thread = None
     try:
         # ---------------------------------------------------------------- #
         # Initilize
@@ -72,8 +74,10 @@ def convolution(config):
     except BaseException as e:
         log.error(e, exc_info=True)
     finally:
-        event.set()
-        listener_thread.join()
+        if event:
+            event.set()
+        if listener_thread:
+            listener_thread.join()
         close_logger()
 
     return
