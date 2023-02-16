@@ -66,14 +66,14 @@ def convolution(config):
 
         # ---------------------------------------------------------------- #
         # Finalize
-        event.set()
-        listener_thread.join()
         convolution_final(time_handle, hist_tapes)
         # ---------------------------------------------------------------- #
 
     except BaseException as e:
         log.error(e, exc_info=True)
     finally:
+        event.set()
+        listener_thread.join()
         close_logger()
 
     return
