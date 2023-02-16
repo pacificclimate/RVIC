@@ -41,6 +41,7 @@ def convert(config_file):
 
     except BaseException as e:
         log.error(e, exc_info=True)
+        raise(e)
     finally:
         close_logger()
 
