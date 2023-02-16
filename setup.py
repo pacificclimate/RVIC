@@ -122,7 +122,7 @@ setup(
         "Programming Language :: Python :: 3.5",
         "Topic :: Scientific/Engineering",
     ],
-    install_requires=[req.strip() for req in open("requirements.txt")],
+    install_requires=["scipy", "numpy < 1.20", "netCDF4", "matplotlib", "pandas < 1.5"],
     extras_require={"test": ["pytest >= 2.5.2"]},
     url="https://github.com/UW-Hydro/RVIC",
     packages=["rvic", "rvic.core"],
