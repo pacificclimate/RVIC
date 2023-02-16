@@ -39,6 +39,8 @@ def convert(config_file):
         uhs2param_final(outlets, dom_data, new_dom_data, config_dict, directories)
         # ---------------------------------------------------------------- #
 
+    except BaseException as e:
+        log.error(e, exc_info=True)
     finally:
         close_logger()
 

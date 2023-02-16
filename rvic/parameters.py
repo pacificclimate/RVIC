@@ -122,6 +122,8 @@ def parameters(config, numofproc=1):
         gen_uh_final(outlets, dom_data, config_dict, directories)
         # ---------------------------------------------------------------- #
 
+    except BaseException as e:
+        log.error(e, exc_info=True)
     finally:
         close_logger()
 

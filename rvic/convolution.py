@@ -71,6 +71,8 @@ def convolution(config):
         convolution_final(time_handle, hist_tapes)
         # ---------------------------------------------------------------- #
 
+    except BaseException as e:
+        log.error(e, exc_info=True)
     finally:
         close_logger()
 
