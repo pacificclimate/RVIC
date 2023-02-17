@@ -72,7 +72,7 @@ def convolution(config):
         # ---------------------------------------------------------------- #
 
     except BaseException as e:
-        log.error(e, exc_info=True)
+        log.exception(e)
         raise(e)
     finally:
         if event:
