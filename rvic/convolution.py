@@ -303,7 +303,7 @@ def convolution_init(config):
 
     # initialize thread to create a Listener and event to stop this thread when needed
     event = Event()
-    listener_thread = Thread(target=send_timestamp, args=(shared_timestamp, event))
+    listener_thread = Thread(target=send_timestamp, args=(shared_timestamp, event, options["LISTENER_PORT"]))
     listener_thread.start()
     # ---------------------------------------------------------------- #
     return hist_tapes, data_model, rout_var, time_handle, directories, shared_timestamp, listener_thread, event

@@ -23,9 +23,8 @@ log = getLogger(LOG_NAME)
 
 # -------------------------------------------------------------------- #
 # create Listener to send timestamp information to connecting Client
-def send_timestamp(timestamp, event):
+def send_timestamp(timestamp, event, port):
     host = os.getenv("LISTENER_ADDRESS", "localhost")
-    port = int(os.getenv("LISTENER_PORT", 5005))
     address = (host, port)
     with Listener(address) as listener:
         listener._listener._socket.settimeout(0.5) # Ensure that listener is not always waiting for connection in case there is no Client
