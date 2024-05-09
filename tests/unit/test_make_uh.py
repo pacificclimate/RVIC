@@ -36,7 +36,7 @@ def fdr_vic(scope="function"):
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]
-    return np.array(a, dtype=np.int)
+    return np.array(a, dtype=np.int_)
 
 
 @pytest.fixture()
@@ -48,7 +48,7 @@ def fdr_vic_small(scope="function"):
         [0, 0, 5, 4, 0],
         [0, 0, 5, 4, 0],
     ]
-    return np.array(a, dtype=np.int)
+    return np.array(a, dtype=np.int_)
 
 
 @pytest.fixture()
@@ -88,7 +88,7 @@ def test_read_direction(fdr_vic, dy_vic, dx_vic):
 
 
 def test_search_catchment(fdr_vic_small, dy_vic, dx_vic, pour_point):
-    basin_ids = np.ones_like(fdr_vic_small, dtype=np.int)
+    basin_ids = np.ones_like(fdr_vic_small, dtype=np.int_)
     basin_id = 1
     to_y, to_x = read_direction(fdr_vic_small, dy_vic, dx_vic)
     catchment, catch_fracs = search_catchment(
@@ -120,7 +120,7 @@ def test_make_uh(fdr_vic_small):
 def test_make_grid_uh_river(fdr_vic_small, dy_vic, dx_vic, pour_point):
     ndays = 4
     t_uh = 40
-    basin_ids = np.ones_like(fdr_vic_small, dtype=np.int)
+    basin_ids = np.ones_like(fdr_vic_small, dtype=np.int_)
     basin_id = 1
     to_y, to_x = read_direction(fdr_vic_small, dy_vic, dx_vic)
     uh = np.zeros((ndays,) + fdr_vic_small.shape)
@@ -148,7 +148,7 @@ def test_make_grid_uh_river(fdr_vic_small, dy_vic, dx_vic, pour_point):
 def test_make_grid_uh(fdr_vic_small, dy_vic, dx_vic, pour_point):
     ndays = 4
     t_uh = 40
-    basin_ids = np.ones_like(fdr_vic_small, dtype=np.int)
+    basin_ids = np.ones_like(fdr_vic_small, dtype=np.int_)
     basin_id = 1
     to_y, to_x = read_direction(fdr_vic_small, dy_vic, dx_vic)
     catchment, _ = search_catchment(to_y, to_x, pour_point, basin_ids, basin_id)
