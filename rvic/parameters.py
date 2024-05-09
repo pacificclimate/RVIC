@@ -637,7 +637,7 @@ def gen_uh_run(uh_box, fdr_data, fdr_vatts, dom_data, outlet, config_dict, direc
     # Add to 'adjust fractions structure'
     y, x = np.nonzero(
         (final_data["fraction"] > 0.0)
-        * (dom_data[dom_mask] > np.finfo(np.float).resolution)
+        * (dom_data[dom_mask] > np.finfo(np.float_).resolution)
     )
 
     # From final data
