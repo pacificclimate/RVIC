@@ -10,6 +10,8 @@ from bisect import bisect_right
 from netCDF4 import Dataset, date2num, date2index, num2date
 from logging import getLogger
 from .log import LOG_NAME
+from multiprocessing.connection import Listener
+from socket import timeout
 from .time_utility import ord_to_datetime
 from .share import MMPERMETER, CMPERMETER, WATERDENSITY, TIMEUNITS, SECSPERDAY
 from .pycompat import pyrange
@@ -19,6 +21,20 @@ from .pycompat import pyrange
 log = getLogger(LOG_NAME)
 # -------------------------------------------------------------------- #
 
+# -------------------------------------------------------------------- #
+# create Listener to send timestamp information to connecting Client
+def send_timestamp(timestamp, event, port):
+    host = os.getenv("LISTENER_HOST", "localhost")
+    address = (host, port)
+    with Listener(address) as listener:
+        listener._listener._socket.settimeout(0.5) # Ensure that listener is not always waiting for connection in case there is no Client
+        while not event.is_set():
+            try:
+                with listener.accept() as conn:
+                    conn.send_bytes(("Current timestamp: %s" % timestamp.value).encode())
+            except timeout:
+                pass
+# -------------------------------------------------------------------- #
 
 # -------------------------------------------------------------------- #
 # Data Model

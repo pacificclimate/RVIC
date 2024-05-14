@@ -122,6 +122,9 @@ def parameters(config, numofproc=1):
         gen_uh_final(outlets, dom_data, config_dict, directories)
         # ---------------------------------------------------------------- #
 
+    except BaseException as e:
+        log.exception(e)
+        raise(e)
     finally:
         close_logger()
 
@@ -634,7 +637,7 @@ def gen_uh_run(uh_box, fdr_data, fdr_vatts, dom_data, outlet, config_dict, direc
     # Add to 'adjust fractions structure'
     y, x = np.nonzero(
         (final_data["fraction"] > 0.0)
-        * (dom_data[dom_mask] > np.finfo(np.float).resolution)
+        * (dom_data[dom_mask] > np.finfo(np.float_).resolution)
     )
 
     # From final data
